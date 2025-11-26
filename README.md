@@ -1,71 +1,59 @@
 # Clustered Data Warehouse
 
-## Overview
+## About
+This project is a Spring Boot application to handle FX (foreign exchange) deals. The main goal is to receive, check, save, and manage FX deals in a PostgreSQL database. It also prevents duplicates and logs errors automatically.
 
-This project is a **Spring Boot application** designed to handle **FX (foreign exchange) deal records**. The main goal was to **receive, validate, store, and manage FX deals** in a PostgreSQL database while ensuring **duplicate prevention, error logging, and data persistence**.
-
-It simulates a **real production environment** with Dockerized PostgreSQL, unit testing, and mutation testing for code quality.
+I built it like a small production setup using Docker, unit tests, and mutation tests to ensure the code works well and is reliable.
 
 ---
 
 ## Features
-
-* CRUD operations for FX deals
-* Bulk insert and CSV upload
-* Validation of FX deals using annotations
-* Prevention of duplicate deals
-* Error logging for invalid data
+* Add, view, and manage FX deals
+* Upload multiple deals at once or via CSV files
+* Validate deals to make sure all fields are correct
+* Skip duplicate deals automatically
+* Log errors when data is invalid
 * REST APIs:
 
-  * `GET /api/deals` — List all deals
-  * `POST /api/deals` — Add a single deal
-  * `POST /api/deals/bulk` — Add multiple deals
-  * `POST /api/deals/upload/csv` — Upload deals from CSV
-* Unit testing with **H2 in-memory database**
-* Mutation testing with **PIT**
+  * `GET /api/deals` — get all deals
+  * `POST /api/deals` — add one deal
+  * `POST /api/deals/bulk` — add multiple deals
+  * `POST /api/deals/upload/csv` — upload deals from CSV
+* Unit testing with H2 in-memory database
+* Mutation testing with PIT
 * Dockerized PostgreSQL for persistent storage
 
 ---
 
-## Technologies Used
-
-* **Java 17**
-* **Spring Boot 3.2** (Web, JPA, Validation)
-* **PostgreSQL**
-* **H2 Database** (for tests)
-* **OpenCSV** (for CSV parsing)
-* **JUnit 5** and **Mockito** (unit testing)
-* **PIT** (mutation testing)
-* **Docker & Docker Compose** (PostgreSQL persistence)
-* **Lombok** (reducing boilerplate code)
+## Technologies
+* Java 17
+* Spring Boot 3.2 (Web, JPA, Validation)
+* PostgreSQL
+* H2 database (for testing)
+* OpenCSV (for CSV files)
+* PIT (mutation testing)
+* Docker & Docker Compose
 
 ---
 
-## Assignment Requirements & Implementation
+## How it Works
+I created REST APIs to receive FX deals and validate them using annotations.
+The service checks for duplicates before saving to the database.
+Errors from invalid deals are logged using Spring’s logger.
 
-| Requirement           | How it was implemented                                                           |
-| --------------------- | -------------------------------------------------------------------------------- |
-| Receive FX deals      | REST APIs (`POST /api/deals`, `/bulk`, `/upload/csv`)                            |
-| Validate deals        | Bean Validation annotations (`@NotBlank`, `@NotNull`, `@Positive`)               |
-| Save deals in DB      | Spring Data JPA with PostgreSQL                                                  |
-| Skip duplicates       | `existsByDealId` method in repository before saving                              |
-| Log errors            | Standard Spring logging (`Logger`) for invalid deals                             |
-| Unit testing          | `FxDealRepositoryTest` with H2 database to test repository logic                 |
-| Mutation testing      | PIT plugin to check test coverage and strength                                   |
-| Data persistence      | Dockerized PostgreSQL with volume (`-v pgdata:/var/lib/postgresql/data`)         |
-| Optional improvements | Considered resilience (Resilience4j + HikariCP) for production-grade DB handling |
+For testing, I used H2 in-memory database for unit tests and **PIT** to check the quality of tests.
+The database runs in Docker for persistent storage, like in a real production environment.
 
 ---
 
 ## Setup Instructions
 
 ### Prerequisites
-
 * Java 17
 * Maven
 * Docker & Docker Compose
 
-### Clone the repository
+### Clone the project
 
 ```bash
 git clone https://github.com/EzzahraF/ClusteredDataWarehouse.git
@@ -86,8 +74,7 @@ docker run --name pg-fxdeals \
 
 ### Configure Spring Boot
 
-In `application.properties`:
-
+Edit `application.properties`:
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/mydb
 spring.datasource.username=admin
@@ -95,43 +82,19 @@ spring.datasource.password=postadmin1234
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
-
 ### Run the application
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-### Run Unit Tests
+### Run tests
 
 ```bash
 ./mvnw test
-```
-
-### Run Mutation Tests
-
-```bash
 ./mvnw pitest:mutationCoverage
 ```
+Reports for mutation testing are in `target/pit-reports/index.html`.
 
-Reports will be generated under `target/pit-reports/index.html`.
 
----
-
-## Testing
-
-* **Unit Tests:** Verify repository and service logic using H2 in-memory DB.
-* **Mutation Testing (PIT):** Measures the effectiveness of tests by generating small code mutations and checking if tests catch them.
-* **Build Status:** Tests pass successfully, ensuring correctness of implemented logic.
-
----
-
-## How I Worked
-
-1. **Database setup:** PostgreSQL in Docker with persistent volume to mimic production environment.
-2. **Spring Boot application:** REST APIs, validation, repository, service, and DTOs implemented.
-3. **Resilience4j** with retries and circuit breakers for robust PostgreSQL connections.
-4. **Unit testing:** H2 in-memory database used for testing repository methods.
-5. **Mutation testing:** Added PIT plugin to measure test strength and identify gaps.
-6. **Git workflow:** Committed incrementally, resolved conflicts using `git pull --rebase`, pushed to GitHub.
 
