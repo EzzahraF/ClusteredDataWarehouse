@@ -1,0 +1,3 @@
+DealId,FromCurrencyIso,ToCurrencyIso,DealDate,DealAmount
+D103,USD,CHF,2025-11-26,5000
+D104,GBP,USD,2025-11-26,2500
