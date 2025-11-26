@@ -130,8 +130,8 @@ Reports will be generated under `target/pit-reports/index.html`.
 
 1. **Database setup:** PostgreSQL in Docker with persistent volume to mimic production environment.
 2. **Spring Boot application:** REST APIs, validation, repository, service, and DTOs implemented.
-d **Resilience4j** with retries and circuit breakers for robust PostgreSQL connections.
-3. **Unit testing:** H2 in-memory database used for testing repository methods.
-4. **Mutation testing:** Added PIT plugin to measure test strength and identify gaps.
-5. **Git workflow:** Committed incrementally, resolved conflicts using `git pull --rebase`, pushed to GitHub.
+3. **Resilience4j** with retries and circuit breakers for robust PostgreSQL connections.
+4. **Unit testing:** H2 in-memory database used for testing repository methods.
+5. **Mutation testing:** Added PIT plugin to measure test strength and identify gaps.
+6. **Git workflow:** Committed incrementally, resolved conflicts using `git pull --rebase`, pushed to GitHub.
 
