@@ -25,17 +25,26 @@ public class FxDealService {
         this.validator = validator;
     }
 
+    /**
+     * Retourne tous les FX deals existants dans la base.
+     */
     public List<FxDeal> getAll() {
         return repository.findAll();
     }
 
-    public boolean exists(String id) {
-        return repository.existsByDealId(id);
+    /**
+     * Vérifie si un deal existe déjà par son ID.
+     */
+    public boolean exists(String dealId) {
+        return repository.existsByDealId(dealId);
     }
 
+    /**
+     * Valide et sauvegarde un deal. Ignore les doublons.
+     */
     public boolean process(FxDeal deal) {
+        // Validation du deal
         Set<ConstraintViolation<FxDeal>> violations = validator.validate(deal);
-
         if (!violations.isEmpty()) {
             violations.forEach(v ->
                     logger.error("Validation error {}: {}", v.getPropertyPath(), v.getMessage())
@@ -43,13 +52,16 @@ public class FxDealService {
             return false;
         }
 
+        // Vérification des doublons
         if (repository.existsByDealId(deal.getDealId())) {
             logger.warn("Duplicate deal skipped: {}", deal.getDealId());
             return false;
         }
 
+        // Sauvegarde en base
         try {
             repository.save(deal);
+            logger.info("Deal saved successfully: {}", deal.getDealId());
             return true;
         } catch (DataIntegrityViolationException e) {
             logger.warn("Duplicate deal from DB constraint: {}", deal.getDealId());

@@ -1,5 +1,6 @@
-package com.progresssoft.clustringdatawarehouse.service;
+package com.progresssoft.clustringdatawarehouse;
 
+import com.progresssoft.clustringdatawarehouse.service.*;
 import com.progresssoft.clustringdatawarehouse.model.FxDeal;
 import com.progresssoft.clustringdatawarehouse.repository.FxDealRepository;
 import jakarta.validation.Validation;
